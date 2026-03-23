@@ -1,0 +1,34 @@
+{
+  "name": "tfcdatagenerator",
+  "version": "0.0.1",
+  "description": "datagenerator for tfc 1.20.1",
+  "keywords": [
+    "tfc",
+    "datagen"
+  ],
+  "homepage": "https://github.com/Mrthomas20121/TFCDataGenerator#readme",
+  "bugs": {
+    "url": "https://github.com/Mrthomas20121/TFCDataGenerator/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mrthomas20121/TFCDataGenerator.git"
+  },
+  "license": "MIT",
+  "author": "Mrthomas20121",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "tsc -p ./tsconfig.json",
+    "start": "node ./src/tests/tfcdatagen.js"
+  },
+  "dependencies": {
+    "tsconfig": "^7.0.0",
+    "void-list": "^1.1.8"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^5.9.3"
+  }
+}
