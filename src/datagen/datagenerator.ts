@@ -3,6 +3,8 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { ResourceKey } from './resources.js';
 import { List } from 'void-list';
 import { Feature } from '../tests/data.js';
+import { Recipe } from '../tests/recipes.js';
+import { Model, MultiModel } from '../tests/asset.js';
 
 export enum Type {
     ASSETS='assets',
@@ -39,9 +41,24 @@ export class DataGenerator {
 
     public run(): void {
         for(const [fileName, json] of this.data) {
+            let jsonObject = this.mergeObjects({
+                __comment__: 'this file was automatically created by tfcdatagenerator.ts'
+            }, json);
             let fullPath = path.join('output', this.type, fileName.getNamespace().replace('#', ''), this.pathToFolder, `${fileName.getPath()}.json`);
-            writeFileSync(this.createTagPath(fullPath), JSON.stringify(json, null, 2), 'utf8');
+            writeFileSync(this.createTagPath(fullPath), JSON.stringify(jsonObject, null, 2), 'utf8');
         }
+    }
+
+    private mergeObjects(...objects: object[]): object {
+        let result = {};
+
+        for(let object of objects) {
+            for(let [key, value] of Object.entries(object)) {
+                result[key] = value;
+            }
+        }
+
+        return result;
     }
 }
 
@@ -78,7 +95,7 @@ export class AbstractTagProvider extends DataGenerator {
         for(const [key, list] of this.tagData) {
             let json = {
                 replace:false,
-                values:list.toArray()
+                values:list.map(k => k.toString()).toArray()
             }
 
             this.data.set(key, json);
@@ -110,12 +127,13 @@ export class RecipeProvider extends DataGenerator {
         super(Type.DATA, 'recipes');
     }
 
-    public addRecipe(name: ResourceKey, json: object): void {
-        this.saveFile(name, json);
+    public addRecipe<T extends Recipe>(name: ResourceKey, recipe: T): void {
+        this.saveFile(name, recipe.toJson());
     }
 }
 
 export type Consumer<T extends DataGenerator> = (provider: T) => void;
+export type BiConsumer<T extends DataGenerator, B> = (provider: T, value: B) => void;
 
 export class FeatureProvider extends DataGenerator {
 
@@ -138,6 +156,18 @@ export class ItemModelProvider extends DataGenerator {
 
     constructor() {
         super(Type.ASSETS, 'models/item');
+    }
+
+    public addModel<T extends Model>(name: ResourceKey, model: T) {
+        this.saveFile(name, model.toJson());
+    }
+
+    public addMultiModel<T extends MultiModel>(name: ResourceKey, model: T) {
+        this.addModel(name, model);
+
+        for(let [key, value] of Object.entries(model.others())) {
+            this.saveFile(ResourceKey.full(key), value);
+        }
     }
 }
 

@@ -1,14 +1,21 @@
-export class ResourceKey extends String {
+export class ResourceKey {
     
     static of(modid: string, path: string): ResourceKey {
         return new ResourceKey(`${modid}:${path}`);
+    }
+
+    static full(path: string): ResourceKey {
+        return new ResourceKey(path);
+    }
+
+    static mc(path: string): ResourceKey {
+        return new ResourceKey(`minecraft:${path}`);
     }
 
     private namespace: string;
     private path: string;
 
     private constructor(location: string) {
-        super();
         if(location.includes(':')) {
             let split = location.split(':');
             this.namespace = split[0];

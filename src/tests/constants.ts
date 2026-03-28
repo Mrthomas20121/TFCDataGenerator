@@ -1,6 +1,8 @@
 import { List } from "void-list";
-import { Metal, Ore, Rock, RockCategory, Tier, Type } from "./data.js";
+import { Metal, MetalItem, Ore, Rock, RockCategory, Tier, Type } from "./data.js";
+import { ItemModel } from "./asset.js";
 import { ResourceKey } from "../datagen/resources.js";
+import { BlockModelProvider, ItemModelProvider } from "../datagen/datagenerator.js";
 
 export const AllRocks: List<Rock> = List.from(
     new Rock('granite', RockCategory.igneous_intrusive, 'white'),
@@ -103,6 +105,68 @@ export const TFC_METALLUM_ORES: List<Ore> = List.from(
     new Ore('wolframite', true, 'tungsten', MetamorphicRocks),
     new Ore('uraninite', true, 'uranium', List.merge(IgneousExtrusiveRocks, IgneousIntrusiveRocks))
 );
+
+export const TFC_Metal_Items: List<MetalItem> = List.from(
+    new MetalItem(ResourceKey.full('tfc:ingot'), Type.ALL, 100, 'forge:ingots', true, false),
+    new MetalItem(ResourceKey.full('tfc:double_ingot'), Type.PART, 200, 'forge:double_ingots', false, false),
+    new MetalItem(ResourceKey.full('tfc:sheet'), Type.PART, 200, 'forge:sheets', false, false),
+    new MetalItem(ResourceKey.full('tfc:double_sheet'), Type.PART, 400, 'forge:double_sheets', false, false),
+    new MetalItem(ResourceKey.full('tfc:rod'), Type.PART, 50, 'forge:rods', false, false),
+
+    new MetalItem(ResourceKey.full('tfc:unfinished_lamp'), Type.TOOL, 100, null, false, false),
+    new MetalItem(ResourceKey.full('tfc:tuyere'), Type.TOOL, 400, 'forge:tuyeres', false, true),
+    new MetalItem(ResourceKey.full('tfc:fish_hook'), Type.TOOL, 200, null, false, false),
+    new MetalItem(ResourceKey.full('tfc:fishing_rod'), Type.TOOL, 200, 'forge:fishing_rods', false, true),
+    new MetalItem(ResourceKey.full('tfc:pickaxe'), Type.TOOL, 100, null, false, true, (provider, value) => { provider.addModel(value, ItemModel.handheld(value)); }),
+    new MetalItem(ResourceKey.full('tfc:pickaxe_head'), Type.TOOL, 100, null, true, false),
+    new MetalItem(ResourceKey.full('tfc:shovel'), Type.TOOL, 100, null, false, true, (provider, value) => { provider.addModel(value, ItemModel.handheld(value)); }),
+    new MetalItem(ResourceKey.full('tfc:shovel_head'), Type.TOOL, 100, null, true, false),
+    new MetalItem(ResourceKey.full('tfc:axe'), Type.TOOL, 100, null, false, true, (provider, value) => { provider.addModel(value, ItemModel.handheld(value)); }),
+    new MetalItem(ResourceKey.full('tfc:axe_head'), Type.TOOL, 100, null, true, false),
+    new MetalItem(ResourceKey.full('tfc:hoe'), Type.TOOL, 100, null, false, true, (provider, value) => { provider.addModel(value, ItemModel.handheld(value)); }),
+    new MetalItem(ResourceKey.full('tfc:hoe_head'), Type.TOOL, 100, null, true, false, (provider, value) => { provider.addModel(value, ItemModel.handheld(value)); }),
+    new MetalItem(ResourceKey.full('tfc:chisel'), Type.TOOL, 100, null, false, true, (provider, value) => { provider.addModel(value, ItemModel.handheld(value)); }),
+    new MetalItem(ResourceKey.full('tfc:chisel_head'), Type.TOOL, 100, null, true, false),
+    new MetalItem(ResourceKey.full('tfc:sword'), Type.TOOL, 200, null, false, true, (provider, value) => { provider.addModel(value, ItemModel.handheld(value)); }),
+    new MetalItem(ResourceKey.full('tfc:sword_blade'), Type.TOOL, 200, null, true, false),
+    new MetalItem(ResourceKey.full('tfc:mace'), Type.TOOL, 200, null, false, true, (provider, value) => { provider.addModel(value, ItemModel.handheld(value)); }),
+    new MetalItem(ResourceKey.full('tfc:mace_head'), Type.TOOL, 200, null, true, false),
+    new MetalItem(ResourceKey.full('tfc:saw'), Type.TOOL, 100, null, false, true, (provider, value) => { provider.addModel(value, ItemModel.handheldFlipped(value)); }),
+    new MetalItem(ResourceKey.full('tfc:saw_blade'), Type.TOOL, 100, null, true, false),
+    new MetalItem(ResourceKey.full('tfc:javelin'), Type.TOOL, 10, null, false, true, (provider, value) => { provider.addModel(value, ItemModel.handheld(value)); }),
+    new MetalItem(ResourceKey.full('tfc:javelin_head'), Type.TOOL, 100, null, true, false),
+    new MetalItem(ResourceKey.full('tfc:hammer'), Type.TOOL, 100, null, false, true, (provider, value) => { provider.addModel(value, ItemModel.handheld(value)); }),
+    new MetalItem(ResourceKey.full('tfc:hammer_head'), Type.TOOL, 100, null, true, false),
+    new MetalItem(ResourceKey.full('tfc:propick'), Type.TOOL, 100, null, false, true, (provider, value) => { provider.addModel(value, ItemModel.handheld(value)); }),
+    new MetalItem(ResourceKey.full('tfc:propick_head'), Type.TOOL, 100, null, true, false),
+    new MetalItem(ResourceKey.full('tfc:knife'), Type.TOOL, 100, null, false, true, (provider, value) => { provider.addModel(value, ItemModel.handheldFlipped(value)); }),
+    new MetalItem(ResourceKey.full('tfc:knife_blade'), Type.TOOL, 100, null, true, false),
+    new MetalItem(ResourceKey.full('tfc:scythe'), Type.TOOL, 100, null, false, true, (provider, value) => { provider.addModel(value, ItemModel.handheld(value)); }),
+    new MetalItem(ResourceKey.full('tfc:scythe_blade'), Type.TOOL, 100, null, true, false),
+    new MetalItem(ResourceKey.full('tfc:shears'), Type.TOOL, 200, null, false, true, (provider, value) => { provider.addModel(value, ItemModel.handheld(value)); }),
+
+    new MetalItem(ResourceKey.full('tfc:unfinished_helmet'), Type.ARMOR, 400, null, false, false),
+    new MetalItem(ResourceKey.full('tfc:helmet'), Type.ARMOR, 600, null, false, true),
+    new MetalItem(ResourceKey.full('tfc:unfinished_chestplate'), Type.ARMOR, 400, null, false, false),
+    new MetalItem(ResourceKey.full('tfc:chestplate'), Type.ARMOR, 800, null, false, true),
+    new MetalItem(ResourceKey.full('tfc:unfinished_greaves'), Type.ARMOR, 400, null, false, false),
+    new MetalItem(ResourceKey.full('tfc:greaves'), Type.ARMOR, 600, null, false, true),
+    new MetalItem(ResourceKey.full('tfc:unfinished_boots'), Type.ARMOR, 200, null, false, false),
+    new MetalItem(ResourceKey.full('tfc:boots'), Type.ARMOR, 400, null, false, true),
+
+    new MetalItem(ResourceKey.full('tfc:shield'), Type.ARMOR, 400, null, false, true)
+);
+
+export const TFC_Metal_Blocks: List<MetalItem> = List.from(
+    new MetalItem(ResourceKey.full('tfc:anvil'), Type.TOOL, 1400, null, false, false),
+    new MetalItem(ResourceKey.full('tfc:block'), Type.PART, 100, 'forge:storage_blocks', false, false),
+    new MetalItem(ResourceKey.full('tfc:block_slab'), Type.PART, 50, null, false, false),
+    new MetalItem(ResourceKey.full('tfc:block_stairs'), Type.PART, 75, null, false, false),
+    new MetalItem(ResourceKey.full('tfc:bars'), Type.TOOL, 25, null, false, false),
+    new MetalItem(ResourceKey.full('tfc:chain'), Type.TOOL, 6, null, false, false),
+    new MetalItem(ResourceKey.full('tfc:lamp'), Type.TOOL, 100, null, false, false),
+    new MetalItem(ResourceKey.full('tfc:trapdoor'), Type.PART, 200, null, false, false),
+)
 
 export const TOOL_TAGS = {
     'axe': 'axes',

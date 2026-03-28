@@ -1,5 +1,7 @@
 import { List } from 'void-list';
 import { ResourceKey } from '../datagen/resources.js';
+import { BiConsumer, Consumer, DataGenerator, ItemModelProvider } from '../datagen/datagenerator.js';
+import { ItemModel } from './asset.js';
 
 export enum Tier {
     I=1,
@@ -38,28 +40,44 @@ export class Metal {
         return Math.round(300 / this.heat_capacity_base) / 100000;
     }
 
-    get ingot_heat_capacity() {
+    get ingot_heat_capacity(): number {
         return 1 / this.heat_capacity_base;
+    }
+
+    getItemName(item: MetalItem): ResourceKey {
+        return ResourceKey.of(this.name.getNamespace(), `metal/${this.name.getPath()}/${item.name}`);
+    }
+
+    getModelItemName(item: MetalItem): ResourceKey {
+        return ResourceKey.of(this.name.getNamespace(), `item/metal/${this.name.getPath()}/${item.name}`);
+    }
+
+    getBlockName(item: MetalItem): ResourceKey {
+        return ResourceKey.of(this.name.getNamespace(), `metal/${this.name.getPath()}/${item.name}`);
+    }
+
+    getModelBlockName(item: MetalItem): ResourceKey {
+        return ResourceKey.of(this.name.getNamespace(), `block/metal/${this.name.getPath()}/${item.name}`);
     }
 }
 
 export class MetalItem {
-    public name: ResourceKey
+    public name: string;
     public type: Type;
     public smelt_amount: number;
-    public parent_model: string;
     public mold: boolean;
     public durability: boolean;
     public tag: string;
+    public consumer: BiConsumer<ItemModelProvider, ResourceKey>;
 
-    constructor(name: ResourceKey, type: Type, smelt_amount: number, parent_model: string, tag: string, mold: boolean=false, durability: boolean=false) {
-        this.name = name;
+    constructor(name: ResourceKey, type: Type, smelt_amount: number, tag: string, mold: boolean, durability: boolean, model: BiConsumer<ItemModelProvider, ResourceKey> = (provider: ItemModelProvider, value) => { provider.addModel(value, ItemModel.generated(value)); }) {
+        this.name = name.getPath();
         this.type = type;
         this.smelt_amount = smelt_amount;
-        this.parent_model = parent_model;
         this.tag = tag;
         this.mold = mold;
         this.durability = durability;
+        this.consumer = model;
     }
 }
 
@@ -216,7 +234,6 @@ export class ClusterOreVein implements Feature {
 
     configured(): object {
         return {
-            __comment__: 'this file was automatically created by tfcdatagenerator.ts',
             type: 'tfc:cluster_vein',
             config: {
                 rarity: this.rarity,
@@ -233,7 +250,6 @@ export class ClusterOreVein implements Feature {
 
     placed(): object {
         return {
-            __comment__: 'this file was automatically created by tfcdatagenerator.ts',
             feature: `${this.name.getNamespace()}:vein/${this.name.getPath()}`,
             placement: []
         }
