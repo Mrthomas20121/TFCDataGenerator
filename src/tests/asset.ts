@@ -1,5 +1,5 @@
 import { ResourceKey } from "../datagen/resources.js";
-import { Metal } from "./data.js";
+import { JsonData, Metal } from "./data.js";
 
 export interface Model {
     toJson(): object
@@ -166,5 +166,145 @@ export class JavelinModel implements MultiModel {
         obj[`${this.name.getNamespace()}:metal/javelin/${this.name.getPath()}_throwing`] = this.throwing(); 
 
         return obj;
+    }
+}
+
+export interface BlockState extends JsonData {};
+
+export class DefaultBlockState implements BlockState {
+
+    name: ResourceKey;
+
+    constructor(blockName: ResourceKey) {
+        this.name = ResourceKey.of(blockName.getNamespace(), `block/${blockName.getPath()}`);
+    }
+
+    toJson(): object {
+        return {
+            variants: {
+                "": {
+                    model: this.name.toString()
+                }
+            }
+        }
+    }
+}
+
+export class AnvilBlockState implements BlockState {
+
+    name: ResourceKey;
+
+    constructor(blockName: ResourceKey) {
+        this.name = ResourceKey.of(blockName.getNamespace(), `block/${blockName.getPath()}`);
+    }
+
+    toJson(): object {
+        return {
+            variants: {
+                "facing=north": {
+                    model: this.name.toString(),
+                y: 90
+                },
+                "facing=east": {
+                    model: this.name.toString(),
+                y: 180
+                },
+                "facing=south": {
+                    model: this.name.toString(),
+                y: 270
+                },
+                "facing=west": {
+                    model: this.name.toString()
+                }
+            }
+        }
+    }
+}
+
+export class TrapdoorBlockState implements BlockState {
+
+    top: ResourceKey;
+    bottom: ResourceKey;
+    open: ResourceKey;
+
+    constructor(blockName: ResourceKey) {
+        let path = blockName.getPath();
+        let namespace = blockName.getNamespace();
+
+        this.top = ResourceKey.of(namespace, `block/${path}_top`);
+        this.bottom = ResourceKey.of(namespace, `block/${path}_bottom`);
+        this.open = ResourceKey.of(namespace, `block/${path}_open`);
+    }
+
+    toJson(): object {
+        return {
+            "variants": {
+                "facing=north,half=bottom,open=false": {
+                    "model": this.bottom.toString()
+                },
+                "facing=south,half=bottom,open=false": {
+                    "model": this.bottom.toString(),
+                    "y": 180
+                },
+                "facing=east,half=bottom,open=false": {
+                    "model": this.bottom.toString(),
+                    "y": 90
+                },
+                "facing=west,half=bottom,open=false": {
+                    "model": this.bottom.toString(),
+                    "y": 270
+                },
+                "facing=north,half=top,open=false": {
+                    "model": this.top.toString()
+                },
+                "facing=south,half=top,open=false": {
+                    "model": this.top.toString(),
+                    "y": 180
+                },
+                "facing=east,half=top,open=false": {
+                    "model": this.top.toString(),
+                    "y": 90
+                },
+                "facing=west,half=top,open=false": {
+                    "model": this.top.toString(),
+                    "y": 270
+                },
+                "facing=north,half=bottom,open=true": {
+                    "model": this.open.toString()
+                },
+                "facing=south,half=bottom,open=true": {
+                    "model": this.open.toString(),
+                    "y": 180
+                },
+                "facing=east,half=bottom,open=true": {
+                    "model": this.open.toString(),
+                    "y": 90
+                },
+                "facing=west,half=bottom,open=true": {
+                    "model": this.open.toString(),
+                    "y": 270
+                },
+                "facing=north,half=top,open=true": {
+                "model": this.open.toString(),
+                    "x": 180,
+                    "y": 180
+                },
+                "facing=south,half=top,open=true": {
+                "model": this.open.toString(),
+                    "x": 180,
+                    "y": 0
+                },
+                "facing=east,half=top,open=true": {
+                "model": this.open.toString(),
+                    "x": 180,
+                    "y": 270
+                },
+                "facing=west,half=top,open=true": {
+                "model": this.open.toString(),
+                    "x": 180,
+                    "y": 90
+                }
+            }
+        }
     }
 }
