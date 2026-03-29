@@ -1,6 +1,6 @@
 import { BlockTagProvider, Consumer, ItemTagProvider } from "../datagen/datagenerator.js";
 import { ResourceKey } from "../datagen/resources.js";
-import { TFC_Metal_Items, TFC_METALLUM_METALS } from "./constants.js";
+import { TFC_Metal_Blocks, TFC_Metal_Items, TFC_METALLUM_METALS } from "./constants.js";
 
 export const tags: { [value:string]: ResourceKey } = {
     'anvil': ResourceKey.full('tfc:anvils'),
@@ -23,7 +23,7 @@ export const tags: { [value:string]: ResourceKey } = {
     'shield': ResourceKey.full('tfc:shields'),
     'shears': ResourceKey.full('tfc:shears'),
     'tuyere': ResourceKey.full('tfc:tuyeres'),
-    'block': ResourceKey.full('storage_blocks')
+    'block': ResourceKey.full('forge:storage_blocks')
 }
 
 export function itemTags(provider: ItemTagProvider) {
@@ -37,5 +37,11 @@ export function itemTags(provider: ItemTagProvider) {
 }
 
 export function blockTags(provider: BlockTagProvider) {
-    
+    for(let metal of TFC_METALLUM_METALS) {
+        for(let part of TFC_Metal_Blocks) {
+            if(tags.hasOwnProperty(part.name) && metal.types.contain(part.type)) {
+                provider.add(tags[part.name], metal.getItemName(part));
+            }
+        }
+    }
 }

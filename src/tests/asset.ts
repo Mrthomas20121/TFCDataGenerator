@@ -82,8 +82,8 @@ export class JavelinModel implements MultiModel {
 
     private name: ResourceKey;
 
-    constructor(metal: Metal) {
-        this.name = metal.name;
+    constructor(metal: ResourceKey) {
+        this.name = metal;
     }
 
     toJson(): object {
@@ -160,10 +160,10 @@ export class JavelinModel implements MultiModel {
     others(): { [key: string]: object; } {
         let obj = {};
 
-        obj[`${this.name.getNamespace()}:item/metal/javelin/${this.name.getPath()}_gui`] = this.gui(); 
-        obj[`${this.name.getNamespace()}:item/metal/javelin/${this.name.getPath()}_in_hand`] = this.inHand(); 
-        obj[`${this.name.getNamespace()}:item/metal/javelin/${this.name.getPath()}_throwing_base`] = this.throwingBase(); 
-        obj[`${this.name.getNamespace()}:item/metal/javelin/${this.name.getPath()}_throwing`] = this.throwing(); 
+        obj[`${this.name.getNamespace()}:metal/javelin/${this.name.getPath()}_gui`] = this.gui(); 
+        obj[`${this.name.getNamespace()}:metal/javelin/${this.name.getPath()}_in_hand`] = this.inHand(); 
+        obj[`${this.name.getNamespace()}:metal/javelin/${this.name.getPath()}_throwing_base`] = this.throwingBase(); 
+        obj[`${this.name.getNamespace()}:metal/javelin/${this.name.getPath()}_throwing`] = this.throwing(); 
 
         return obj;
     }

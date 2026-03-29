@@ -45,19 +45,11 @@ export class Metal {
     }
 
     getItemName(item: MetalItem): ResourceKey {
-        return ResourceKey.of(this.name.getNamespace(), `metal/${this.name.getPath()}/${item.name}`);
-    }
-
-    getModelItemName(item: MetalItem): ResourceKey {
-        return ResourceKey.of(this.name.getNamespace(), `item/metal/${this.name.getPath()}/${item.name}`);
+        return ResourceKey.of(this.name.getNamespace(), `metal/${item.name}/${this.name.getPath()}`);
     }
 
     getBlockName(item: MetalItem): ResourceKey {
-        return ResourceKey.of(this.name.getNamespace(), `metal/${this.name.getPath()}/${item.name}`);
-    }
-
-    getModelBlockName(item: MetalItem): ResourceKey {
-        return ResourceKey.of(this.name.getNamespace(), `block/metal/${this.name.getPath()}/${item.name}`);
+        return ResourceKey.of(this.name.getNamespace(), `metal/${item.name}/${this.name.getPath()}`);
     }
 }
 
